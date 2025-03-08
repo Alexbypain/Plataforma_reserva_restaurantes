@@ -1,3 +1,15 @@
+<?php
+// Iniciar la sesión
+session_start();
+
+// Obtener el mensaje y el tipo de mensaje de la sesión
+$mensaje = $_SESSION['mensaje'] ?? null;
+$tipo_mensaje = $_SESSION['tipo_mensaje'] ?? null;
+
+// Limpiar el mensaje de la sesión después de mostrarlo
+unset($_SESSION['mensaje']);
+unset($_SESSION['tipo_mensaje']);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,10 +17,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Realizar Reserva</title>
     <link rel="stylesheet" href="../../styles-booking.css">
+    <!-- Incluir SweetAlert2 para alertas bonitas -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <h1>RESERVAR</h1>
-    <form action="" method="POST">
+
+    <!-- Formulario de reserva -->
+    <form action="../../controllers/ReservaControlle.php" method="POST">
+        <!-- Campos del formulario -->
         <label for="nombre_completo">Nombre Completo:</label><br>
         <input type="text" id="nombre_completo" name="nombre_completo" required><br><br>
 
@@ -35,5 +52,17 @@
 
         <input type="submit" value="Reservar">
     </form>
+
+    <!-- Script para mostrar la alerta -->
+    <script>
+        <?php if ($mensaje): ?>
+            Swal.fire({
+                icon: '<?= $tipo_mensaje === "success" ? "success" : "error" ?>',
+                title: '<?= $tipo_mensaje === "success" ? "Éxito" : "Error" ?>',
+                text: '<?= $mensaje ?>',
+                confirmButtonText: 'Aceptar'
+            });
+        <?php endif; ?>
+    </script>
 </body>
 </html>
