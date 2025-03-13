@@ -159,7 +159,7 @@
                         <p class="rating">&#9733;&#9733;&#9733;&#9733;&#9734; 103 opiniones</p>
                         <p class="card-text">Italiana, Europea - $$ - $$$</p>
                         <p class="text-muted">"Una explosión de sabores en cada bocado."</p>
-                        <a href="#" class="btn btn-warning">Reservar ahora</a>
+                        <a href="/views/Booking/create.php" class="btn btn-warning">Reservar ahora</a>
                     </div>
                 </div>
             </div>
