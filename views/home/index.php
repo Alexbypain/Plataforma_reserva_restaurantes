@@ -1,5 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
+<?php
+require_once __DIR__ . '/../../config/session_helper.php';
+iniciar_sesion();
+?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -108,11 +110,14 @@
     </style>
 </head>
 <body>
-
     <!-- Menú de navegación -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="index.html"><i class="fa-solid fa-user"></i> Iniciar sesión</a>
+            <?php if(esta_logueado()): ?>
+                <a href="index.php?controlador=logeo&accion=logout"><i class="fa-solid fa-sign-out-alt"></i> Cerrar sesión</a>
+            <?php else: ?>
+                <a href="index.php?controlador=logeo&accion=verLogin"><i class="fa-solid fa-user"></i> Iniciar sesión</a>
+            <?php endif; ?>
             <a href="restaurantes.html"><i class="fa-solid fa-utensils"></i> Restaurantes</a>
             <a href="#"><i class="fa-solid fa-tag"></i> Promociones</a>
             <a href="#"><i class="fa-solid fa-envelope"></i> Contacto</a>
@@ -121,13 +126,14 @@
 
     <!-- Sección de mensaje de sesión -->
     <?php 
-        if(isset($_SESSION['email'])) {
-            echo "<div class='container text-center'><h4>Bienvenido al sistema usuario " . $_SESSION['email'] . "</h4></div>";
+        iniciar_sesion(); // Asegurarse de que la sesión esté iniciada
+        if(esta_logueado()) {
+            echo "<div class='container text-center'><h4>Bienvenido al sistema usuario " . obtener_usuario_actual() . "</h4></div>";
         } else {
             echo "<p class='container text-center'>No tiene acceso al sistema</p>";
         }
     ?>
-
+    
     <!-- Hero -->
     <header class="hero">
         <h1>Descubre los Mejores Restaurantes de Ibagué</h1>
@@ -168,5 +174,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Resto del contenido HTML -->
 </body>
 </html>

@@ -1,4 +1,9 @@
 <?php include_once "views/shared/loginHeader.php"?>
+<?php 
+require_once "config/session_helper.php";
+iniciar_sesion();
+include_once "views/shared/LoginHeader.php";
+?>
 
 <div class="login-container">
         <!-- Título dinámico con un icono -->

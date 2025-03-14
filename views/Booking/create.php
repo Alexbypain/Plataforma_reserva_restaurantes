@@ -1,6 +1,9 @@
 <?php
-// Iniciar la sesión
-session_start();
+// Incluir el helper de sesión
+require_once "../../config/session_helper.php";
+
+// Iniciar la sesión de manera segura
+iniciar_sesion();
 
 // Obtener el mensaje y el tipo de mensaje de la sesión
 $mensaje = $_SESSION['mensaje'] ?? null;
@@ -9,6 +12,9 @@ $tipo_mensaje = $_SESSION['tipo_mensaje'] ?? null;
 // Limpiar el mensaje de la sesión después de mostrarlo
 unset($_SESSION['mensaje']);
 unset($_SESSION['tipo_mensaje']);
+
+// Guardar la sesión después de modificarla
+session_write_close();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -24,8 +30,9 @@ unset($_SESSION['tipo_mensaje']);
     <h1>RESERVAR</h1>
 
     <!-- Formulario de reserva -->
-    <form action="../../controllers/ReservaControlle.php" method="POST">
-        <!-- Campos del formulario -->
+    <!-- Por esto: -->
+    <form action="../../index.php?controlador=reserva&accion=crear" method="post" id="reservaForm">
+    <!-- Campos del formulario -->
         <label for="nombre_completo">Nombre Completo:</label><br>
         <input type="text" id="nombre_completo" name="nombre_completo" required><br><br>
 
@@ -63,6 +70,27 @@ unset($_SESSION['tipo_mensaje']);
                 confirmButtonText: 'Aceptar'
             });
         <?php endif; ?>
+        
+        // Validación adicional del formulario
+        document.getElementById('reservaForm').addEventListener('submit', function(event) {
+            const fechaReserva = document.getElementById('fecha_reserva').value;
+            const horaReserva = document.getElementById('hora_reserva').value;
+            
+            // Validar que la fecha no sea anterior a hoy
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+            const fechaSeleccionada = new Date(fechaReserva);
+            
+            if (fechaSeleccionada < hoy) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La fecha de reserva no puede ser anterior a hoy',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
     </script>
 </body>
 </html>
