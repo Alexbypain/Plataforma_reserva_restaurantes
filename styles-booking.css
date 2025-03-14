@@ -1,0 +1,123 @@
+/* ESTILOS RESERVAS */
+
+/* Reseteamos márgenes y padding predeterminados */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fondo general */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    padding: 0;
+    margin: 0;
+    background-image: url('https://images4.alphacoders.com/646/646937.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Estilo para el título principal */
+h1 {
+    text-align: center;
+    color: #ffffff;
+    font-size: 3em;
+    margin: 40px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilo para los formularios */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Espaciado entre etiquetas y campos */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Campos de entrada */
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+input[type="tel"],
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+/*Cuando se posa el cursor en los campos*/
+input[type="text"]:hover,
+input[type="date"]:hover,
+input[type="time"]:hover,
+input[type="number"]:hover,
+input[type="tel"]:hover,
+textarea:hover {
+    background-color: #dbdfe1;
+}
+
+/* Efecto al hacer foco en los campos */
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+textarea:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+}
+
+/* El botón de envío */
+input[type="submit"] {
+    width: 50%;           
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    content: url('images/logo_reserva.png');
+    transition: background-color 0.3s, transform 0.3s ease;
+    display: block;
+    margin: 0 auto; 
+    text-align: center; 
+}
+
+/* Efecto al pasar el mouse sobre el botón */
+input[type="submit"]:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+input[type="submit"]::before {
+    content: url('images/logo_reserva.png');
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+/* Ajuste para texto largo (textarea) */
+textarea {
+    resize: vertical;
+}
+
+/* Estilo adicional para márgenes */
+br {
+    margin-bottom: 10px;
+}

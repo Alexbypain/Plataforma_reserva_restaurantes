@@ -1,21 +1,21 @@
 <?php
-
 class HomeController {
+    
+    public function __construct() {
+        require_once "config/session_helper.php";
+    }
+    
     public function index() {
-        // Iniciar sesión si aún no está iniciada
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+        iniciar_sesion(); // Usar la función centralizada
 
-        if (isset($_SESSION['email'])) {
+        if (esta_logueado()) {
             $data['titulo'] = "Gestión De reservas restaurante";
+            $data['usuario'] = obtener_usuario_actual();
             require_once "views/home/index.php";
         } else {
             header("Location: index.php?controlador=logeo&accion=verLogin");
-            exit();
+            exit(); // Añadir exit después de redireccionar
         }
-    
     }
 }
-
 ?>

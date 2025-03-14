@@ -1,26 +1,26 @@
-<?php 
+<?php
+// index.php en la raíz del proyecto
+require_once "config/config.php";
+require_once "config/database.php";
+require_once "core/routes.php";
+require_once "config/session_helper.php";
 
-    require_once "config/config.php";
-    require_once "core/routes.php";
+// Iniciar sesión de manera segura
+iniciar_sesion();
 
-    require_once 'config/database.php';
+// Obtener parámetros de la URL
+$controlador = $_GET['controlador'] ?? CONTROLADOR_PRINCIPAL;
+$accion = $_GET['accion'] ?? ACCION_PRINCIPAL;
+$id = $_GET['id'] ?? null;
 
-    if(isset($_GET['controlador'])) {
-        $controlador = cargarControlador($_GET['controlador']);
-
-        if(isset($_GET['accion'])) {
-            if(isset($_GET['id'])) {
-                cargarAccion($controlador, $_GET['accion'], $_GET['id']);
-            } else {
-                cargarAccion($controlador, $_GET['accion']);
-            }
-        } else {
-            cargarAccion($controlador, ACCION_PRINCIPAL);
-        }
-        
-    } else {
-        $controlador = cargarControlador(CONTROLADOR_PRINCIPAL);
-        cargarAccion($controlador, ACCION_PRINCIPAL);
-    }
-
+// Cargar controlador y ejecutar acción
+try {
+    $controlador = cargarControlador($controlador);
+    cargarAccion($controlador, $accion, $id);
+} catch (Exception $e) {
+    $_SESSION['mensaje'] = "Error en el sistema: " . $e->getMessage();
+    $_SESSION['tipo_mensaje'] = "error";
+    header("Location: index.php?controlador=home&accion=index");
+    exit();
+}
 ?>
