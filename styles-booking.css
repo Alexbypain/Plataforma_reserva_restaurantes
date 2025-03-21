@@ -100,6 +100,24 @@ input[type="submit"] {
     text-align: center; 
 }
 
+/* El botón de volver */
+.btn-volver {
+    margin-top: 20px;
+    width: 50%;
+    background-color: #778ce1;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s ease;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+
 /* Efecto al pasar el mouse sobre el botón */
 input[type="submit"]:hover {
     background-color: #45a049;
@@ -120,4 +138,71 @@ textarea {
 /* Estilo adicional para márgenes */
 br {
     margin-bottom: 10px;
+}
+
+/* ESTILOS LISTAR RESERVAS */
+
+.container-listar {
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box; 
+}
+
+.table-container-listar {
+    height: calc(100% - 50px);
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-listar {
+    width: 100%;
+    table-layout: fixed;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table-listar thead {
+    background: #28a745;
+    color: white;
+}
+
+.table-listar tbody tr:hover {
+    background-color: #dff0d8; 
+}
+
+.table-listar th, .table-listar td {
+    padding: 10px;
+    text-align: center;
+}
+
+.btn-edit {
+    color: white;
+    background: #74a2f0;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+}
+
+.btn-edit:hover {
+    background: #c2f1ec;
+    transform: scale(1.05);
+}
+
+.swal2-popup {
+    background: #f4f1de !important;
+    color: #1b4332 !important;
+    border-radius: 10px;
+}
+
+.swal2-confirm {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+
+.alert {
+    border-radius: 8px;
 }

@@ -1,6 +1,6 @@
 <?php
-// Incluir el helper de sesión
-require_once "../../config/session_helper.php";
+// Incluir el helper de sesión y la conexión a la base de datos
+require_once __DIR__ . '/../../config/session_helper.php';
 
 // Iniciar la sesión de manera segura
 iniciar_sesion();
@@ -12,48 +12,78 @@ $tipo_mensaje = $_SESSION['tipo_mensaje'] ?? null;
 // Limpiar el mensaje de la sesión después de mostrarlo
 unset($_SESSION['mensaje']);
 unset($_SESSION['tipo_mensaje']);
-
-// Guardar la sesión después de modificarla
 session_write_close();
-?>
 
+// Obtener la reserva a editar
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $query = "SELECT * FROM reservas WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $reserva = $result->fetch_assoc();
+}
+
+// Procesar actualización
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $id = $_POST['id'];
+    $nombre_completo = $_POST['nombre_completo'];
+    $fecha_reserva = $_POST['fecha_reserva'];
+    $hora_reserva = $_POST['hora_reserva'];
+    $motivo = $_POST['motivo'];
+    $telefono = $_POST['telefono'];
+    $numero_personas = $_POST['numero_personas'];
+    $requisitos_especiales = $_POST['requisitos_especiales'];
+    $alergias_intolerancias = $_POST['alergias_intolerancias'];
+
+    $query = "UPDATE reservas SET nombre_completo=?, fecha_reserva=?, hora_reserva=?, motivo=?, telefono=?, numero_personas=?, requisitos_especiales=?, alergias_intolerancias=? WHERE id=?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("sssssisii", $nombre_completo, $fecha_reserva, $hora_reserva, $motivo, $telefono, $numero_personas, $requisitos_especiales, $alergias_intolerancias, $id);
+
+    if ($stmt->execute()) {
+        $_SESSION['mensaje'] = "Reserva actualizada exitosamente";
+        $_SESSION['tipo_mensaje'] = "success";
+        header("Location: reservas.php");
+    } else {
+        $_SESSION['mensaje'] = "Error al actualizar la reserva";
+        $_SESSION['tipo_mensaje'] = "error";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realizar Reserva</title>
+    <title>Editar Reserva</title>
     <link rel="stylesheet" href="../../styles-booking.css">
-    <!-- Incluir SweetAlert2 para alertas bonitas -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <h1>RESERVAR</h1>
+    <h1>EDITAR RESERVA</h1>
 
-    <!-- Formulario de reserva -->
-    <!-- Por esto: -->
-    <form action="../../index.php?controlador=reserva&accion=crear" method="post" id="reservaForm">
-    <!-- Campos del formulario -->
+    <!-- Formulario de edición -->
+    <form action="editar_reserva.php" method="post" id="reservaForm">
+        <input type="hidden" name="id" value="<?= $reserva['id'] ?>">
+
         <label for="nombre_completo">Nombre Completo:</label><br>
-        <input type="text" id="nombre_completo" name="nombre_completo" required><br><br>
+        <input type="text" id="nombre_completo" name="nombre_completo" value="" required><br><br>
 
         <label for="fecha_reserva">Fecha de Reserva:</label><br>
-        <input type="date" id="fecha_reserva" name="fecha_reserva" required><br><br>
+        <input type="date" id="fecha_reserva" name="fecha_reserva" value="" required><br><br>
 
         <label for="hora_reserva">Hora de Reserva:</label><br>
-        <input type="time" id="hora_reserva" name="hora_reserva" required><br><br>
+        <input type="time" id="hora_reserva" name="hora_reserva" value="" required><br><br>
 
         <label for="motivo">Motivo de la Reserva:</label><br>
         <textarea id="motivo" name="motivo" rows="4" cols="50" required></textarea><br><br>
 
         <label for="telefono">Teléfono de Contacto:</label><br>
-        <input type="tel" id="telefono" name="telefono" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" placeholder="Formato: 1234567890" required><br><br>
-
-        <label for="correo">Correo Electrónico:</label><br>
-        <input type="email" id="correo" name="correo" required><br><br>
+        <input type="tel" id="telefono" name="telefono" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" placeholder="Formato: 1234567890" value="" required><br><br>
 
         <label for="numero_personas">Número de Personas:</label><br>
-        <input type="number" id="numero_personas" name="numero_personas" min="1" max="30"><br><br>
+        <input type="number" id="numero_personas" name="numero_personas" min="1" value="" required><br><br>
 
         <label for="requisitos_especiales">Requisitos Especiales:</label><br>
         <textarea id="requisitos_especiales" name="requisitos_especiales" rows="4" cols="50"></textarea><br><br>
@@ -61,7 +91,9 @@ session_write_close();
         <label for="alergias_intolerancias">Alergias o Intolerancias Alimenticias:</label><br>
         <textarea id="alergias_intolerancias" name="alergias_intolerancias" rows="4" cols="50"></textarea><br><br>
 
-        <input type="submit" value="Reservar">
+        <input type="submit" value="Guardar Cambios">
+        <br>
+        <button type="button" onclick="window.history.back();" class="btn-volver">Volver</button>
     </form>
 
     <!-- Validaciones Formulario -->
@@ -183,6 +215,5 @@ session_write_close();
             }
         });
     </script>
-
 </body>
 </html>
