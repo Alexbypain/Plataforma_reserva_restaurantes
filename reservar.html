@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Restaurante</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Reservar en <span id="restauranteNombre"></span></h2>
+        <form id="reservaForm">
+            <input type="hidden" id="restauranteIdInput">
+            
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" required>
+
+            <label for="hora">Hora:</label>
+            <input type="time" id="hora" required>
+
+            <label for="motivo">Motivo:</label>
+            <input type="text" id="motivo" required>
+
+            <label for="cantidadPersonas">Cantidad de personas:</label>
+            <input type="number" id="cantidadPersonas" required>
+
+            <label for="requisitosEspeciales">Requisitos especiales:</label>
+            <textarea id="requisitosEspeciales"></textarea>
+
+            <label for="alergias">Alergias:</label>
+            <textarea id="alergias"></textarea>
+
+            <button type="submit">Reservar</button>
+        </form>
+    </div>
+
+    <script src="reservas.js"></script>
+</body>
+</html>

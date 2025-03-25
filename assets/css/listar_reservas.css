@@ -1,0 +1,4 @@
+/* Cambiar color de la fecha en las tarjetas de reservas */
+.detalles-reserva p {
+    color: white !important; /* Forzar color blanco */
+}
