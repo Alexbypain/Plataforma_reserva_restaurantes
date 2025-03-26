@@ -9,10 +9,7 @@
     <link rel="stylesheet" href="assets/css/ya_logeado.css">
 </head>
 <body>
-    <div id="successMessage" class="alert alert-success text-center" style="display: none;">
-        <i class="fas fa-check-circle"></i>
-        ¡Su reserva ha sido creada exitosamente!
-    </div>
+    
 
     <nav class="navbar">
         <div class="nav-container">
@@ -22,7 +19,7 @@
                 </button>
                 <div class="dropdown-menu" id="menu">
                     <a href="#"><i class="fas fa-user-circle"></i> Perfil</a>
-                    <a href="#"><i class="fas fa-calendar-alt"></i> Reservas</a>
+                    <a href="listar_reservas.html"><i class="fas fa-calendar-alt"></i> Reservas</a>
                     <a href="crear_restaurante.html" id="adminDropdown" style="display: none;"><i class="fas fa-plus-circle"></i> Crear Restaurante</a>
                     <a href="logout.html"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
                 </div>
@@ -37,6 +34,11 @@
     <div class="container text-center mt-4">
         <h2 class="text-warning">Restaurantes en Ibagué</h2>
         <p>Explora los mejores lugares para disfrutar de una excelente comida.</p>
+    </div>
+
+    <div id="successMessage" class="alert alert-success text-center" style="display: none;">
+        <i class="fas fa-check-circle"></i>
+        ¡Su reserva ha sido creada exitosamente!
     </div>
 
     <div class="container mt-4">
