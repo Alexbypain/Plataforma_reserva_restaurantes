@@ -79,6 +79,9 @@ document.addEventListener("DOMContentLoaded", function() {
                             <p><strong>Requisitos:</strong> ${reserva.requisitosEspeciales}</p>
                             <p><strong>Alergias:</strong> ${reserva.alergias}</p>
                         </div>
+                        <button class="btn btn-success editar" data-id="${reserva.reserva_id} style="display: none;">
+                            Editar
+                        </button>
                     </div>
                 </div>
             `;
@@ -99,6 +102,19 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
         });
+
+        document.querySelectorAll(".editar").forEach(button => {
+            button.addEventListener("click", function () {
+                const reservaId = this.getAttribute("data-id");
+                redirigir(reservaId);
+            });
+        });
+
     })
     .catch(error => console.error("❌ Error al obtener reservas:", error));
+    
+    // Redirigir al editar
+    function redirigir(reservaId) {
+        window.location.href = `editar_reserva.html?id=${reservaId}`;
+    }
 });
