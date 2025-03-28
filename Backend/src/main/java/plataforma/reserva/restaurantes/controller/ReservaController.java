@@ -1,6 +1,7 @@
 package plataforma.reserva.restaurantes.controller;
 
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,10 +10,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import plataforma.reserva.restaurantes.domain.dto.DatosCrearReserva;
-import plataforma.reserva.restaurantes.domain.dto.DatosCrearRestaurante;
-import plataforma.reserva.restaurantes.domain.dto.DatosListadoReserva;
-import plataforma.reserva.restaurantes.domain.dto.DatosListadoRestaurantes;
+import plataforma.reserva.restaurantes.domain.ValidacionException;
+import plataforma.reserva.restaurantes.domain.dto.*;
 import plataforma.reserva.restaurantes.domain.entities.Reserva;
 import plataforma.reserva.restaurantes.domain.entities.Restaurante;
 import plataforma.reserva.restaurantes.domain.entities.Usuario;
@@ -70,6 +69,28 @@ public class ReservaController {
         return ResponseEntity.ok(reservas.map(DatosListadoReserva::new));
     }
 
+    @DeleteMapping("/{id}")
+    @org.springframework.transaction.annotation.Transactional
+    public ResponseEntity eliminar(@PathVariable Long id) {
+        if(!reservaRepository.existsById(id)){
+            throw new ValidacionException("No existe una reserva con el id informado");
+        }
+        reservaRepository.deleteById(id);
+        return ResponseEntity.ok("reserva eliminada");
+    }
 
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<DatosRespuestaReservaActualizado> actualizar(@RequestBody @Valid DatosActualizarReserva datos, @PathVariable Long id) {
+
+            if(!reservaRepository.existsById(id)){
+                throw new ValidacionException("No existe una reserva con el id informado");
+            }
+
+            var reserva = reservaRepository.getReferenceById(id);
+            reserva.actualizarInformaciones(datos);
+            var reservaActualizada= new DatosRespuestaReservaActualizado(reserva);
+        return ResponseEntity.ok(reservaActualizada);
+    }
 
 }
