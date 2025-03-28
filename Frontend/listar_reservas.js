@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const usuarioId = decodedToken.id.toString();
 
-    // 🔹 Hacer la petición al servidor
+    // 🔹 Hacer la petición al servidor para obtener las reservas
     fetch(`http://localhost:8080/reservas?usuario_id=${usuarioId}`, {
         method: "GET",
         headers: {
@@ -79,8 +79,11 @@ document.addEventListener("DOMContentLoaded", function() {
                             <p><strong>Requisitos:</strong> ${reserva.requisitosEspeciales}</p>
                             <p><strong>Alergias:</strong> ${reserva.alergias}</p>
                         </div>
-                        <button class="btn btn-success editar" data-id="${reserva.reserva_id} style="display: none;">
+                        <button class="btn btn-success editar" data-id="${reserva.reserva_id}" style="display: none;">
                             Editar
+                        </button>
+                        <button class="btn btn-danger eliminar" data-id="${reserva.reserva_id}">
+                            Eliminar
                         </button>
                     </div>
                 </div>
@@ -103,6 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
 
+        // 🔹 Agregar evento a los botones "Editar"
         document.querySelectorAll(".editar").forEach(button => {
             button.addEventListener("click", function () {
                 const reservaId = this.getAttribute("data-id");
@@ -110,9 +114,42 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
 
+        // 🔹 Agregar evento a los botones "Eliminar"
+        document.querySelectorAll(".eliminar").forEach(button => {
+            button.addEventListener("click", function () {
+                const reservaId = this.getAttribute("data-id");
+                if (!confirm("¿Estás seguro de que deseas eliminar esta reserva?")) {
+                    return;
+                }
+                // Realizar petición DELETE
+                fetch(`http://localhost:8080/reservas/${reservaId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Error al eliminar la reserva");
+                    }
+                    // Se elimina la tarjeta del DOM
+                    const card = button.closest('.col-md-4');
+                    if (card) {
+                        card.remove();
+                    }
+                    alert("Reserva eliminada exitosamente");
+                })
+                .catch(error => {
+                    console.error("❌ Error al eliminar la reserva:", error);
+                    alert("Ocurrió un error al eliminar la reserva");
+                });
+            });
+        });
+
     })
     .catch(error => console.error("❌ Error al obtener reservas:", error));
-    
+
     // Redirigir al editar
     function redirigir(reservaId) {
         window.location.href = `editar_reserva.html?id=${reservaId}`;
