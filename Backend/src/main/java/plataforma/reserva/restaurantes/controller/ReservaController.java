@@ -78,6 +78,20 @@ public class ReservaController {
         reservaRepository.deleteById(id);
         return ResponseEntity.ok("reserva eliminada");
     }
+    @GetMapping("/historial")
+    public ResponseEntity<Page<DatosListadoReserva>> listarHistorialReservasPorUsuario(
+            @RequestParam Long usuario_id,
+            @PageableDefault(size = 5) Pageable paginacion) {
+
+        LocalDateTime now = LocalDateTime.now().minusHours(1);
+        Page<Reserva> reservas = reservaRepository.findByUsuarioIdAndCompletedReservations(usuario_id, now, paginacion);
+
+        return ResponseEntity.ok(reservas.map(DatosListadoReserva::new));
+    }
+
+
+
+
 
     @PutMapping("/{id}")
     @Transactional
