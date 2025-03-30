@@ -19,6 +19,7 @@ import plataforma.reserva.restaurantes.domain.repository.ReservaRepository;
 import plataforma.reserva.restaurantes.domain.repository.RestauranteRepository;
 import plataforma.reserva.restaurantes.domain.repository.UsuarioRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Base64;
@@ -89,10 +90,6 @@ public class ReservaController {
         return ResponseEntity.ok(reservas.map(DatosListadoReserva::new));
     }
 
-
-
-
-
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<DatosRespuestaReservaActualizado> actualizar(@RequestBody @Valid DatosActualizarReserva datos, @PathVariable Long id) {
@@ -106,5 +103,17 @@ public class ReservaController {
             var reservaActualizada= new DatosRespuestaReservaActualizado(reserva);
         return ResponseEntity.ok(reservaActualizada);
     }
+
+    @GetMapping("/reservas_hoy")
+    public ResponseEntity<Page<DatosListadoRestaurantesHoy>> listarReservasHoyPorRestaurante(
+        @RequestParam Long usuario_id,
+        @PageableDefault(size = 5) Pageable paginacion) {
+        Usuario administrador = usuarioRepository.findById(usuario_id).get();
+        Restaurante restaurantes = restauranteRepository.findByAdministrador(administrador).get();
+        var restaurante_id = restaurantes.getId();
+        Page<Reserva> reservas = reservaRepository.findByRestauranteIdAndUpcomingReservations(restaurante_id,LocalDate.now(), paginacion);
+        return ResponseEntity.ok(reservas.map(DatosListadoRestaurantesHoy::new));
+    }
+
 
 }

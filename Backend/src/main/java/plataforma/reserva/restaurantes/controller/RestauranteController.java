@@ -10,12 +10,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import plataforma.reserva.restaurantes.domain.dto.DatosCrearRestaurante;
+import plataforma.reserva.restaurantes.domain.dto.DatosListadoReserva;
 import plataforma.reserva.restaurantes.domain.dto.DatosListadoRestaurantes;
+import plataforma.reserva.restaurantes.domain.dto.DatosListadoRestaurantesHoy;
+import plataforma.reserva.restaurantes.domain.entities.Reserva;
 import plataforma.reserva.restaurantes.domain.entities.Restaurante;
 import plataforma.reserva.restaurantes.domain.entities.Usuario;
+import plataforma.reserva.restaurantes.domain.repository.ReservaRepository;
 import plataforma.reserva.restaurantes.domain.repository.RestauranteRepository;
 import plataforma.reserva.restaurantes.domain.repository.UsuarioRepository;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Base64;
 
@@ -25,6 +30,9 @@ public class RestauranteController {
 
     @Autowired
     private RestauranteRepository restauranteRepository;
+
+    @Autowired
+    private ReservaRepository reservaRepository;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -63,5 +71,6 @@ public class RestauranteController {
         return ResponseEntity.ok(restauranteRepository.findAll(paginacion).map(DatosListadoRestaurantes::new));
         // return ResponseEntity.ok(topicoRepository.findAllByStatus(ACTIVE,paginacion).map(DatosListadoTopico::new));
     }
-
+    
+    
 }

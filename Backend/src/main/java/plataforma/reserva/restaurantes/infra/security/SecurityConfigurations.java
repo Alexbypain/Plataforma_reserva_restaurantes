@@ -43,6 +43,7 @@ public class SecurityConfigurations {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**","swagger-ui.html/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/restaurantes").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/restaurantes").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/reservas/reservas_hoy").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
