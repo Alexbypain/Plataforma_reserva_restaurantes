@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // 🔹 Verificar si hay reservas
         if (!data.content || data.content.length === 0) {
-            container.innerHTML = "<p class='text-center text-white'>No tienes reservas activas.</p>";
+            container.innerHTML = "<p class='text-center text-muted'>No tienes reservas activas.</p>";
             return;
         }
 

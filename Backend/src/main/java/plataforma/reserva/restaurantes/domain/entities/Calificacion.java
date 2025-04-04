@@ -22,7 +22,11 @@ public class Calificacion {
     private String comentario;
 
 
-    @OneToOne(mappedBy = "calificacion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "calificacion")
     private Reserva reserva;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 
 }

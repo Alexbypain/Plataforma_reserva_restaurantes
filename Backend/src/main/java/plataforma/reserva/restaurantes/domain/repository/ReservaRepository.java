@@ -11,6 +11,8 @@ import plataforma.reserva.restaurantes.domain.entities.Reserva;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import plataforma.reserva.restaurantes.domain.entities.Restaurante;
+import java.util.List;
 
 public interface ReservaRepository extends JpaRepository<Reserva,Long> {
 
@@ -22,4 +24,6 @@ public interface ReservaRepository extends JpaRepository<Reserva,Long> {
 
    @Query("SELECT r FROM Reserva r WHERE r.restaurante.id = :restauranteId AND FUNCTION('DATE', r.fecha) = :fecha")
     Page<Reserva> findByRestauranteIdAndUpcomingReservations(@Param("restauranteId") Long restauranteId, @Param("fecha") LocalDate fecha,   Pageable pageable);
+
+    List<Reserva> findByRestaurante(Restaurante restaurante);
 }
