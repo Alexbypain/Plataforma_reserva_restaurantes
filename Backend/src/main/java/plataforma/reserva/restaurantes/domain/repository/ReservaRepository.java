@@ -16,7 +16,7 @@ import java.util.List;
 
 public interface ReservaRepository extends JpaRepository<Reserva,Long> {
 
-    @Query("SELECT r FROM Reserva r WHERE r.usuario.id = :usuarioId AND r.fecha > :now")
+    @Query("SELECT r FROM Reserva r WHERE r.usuario.id = :usuarioId AND r.fecha >= :now")
     Page<Reserva> findByUsuarioIdAndUpcomingReservations(Long usuarioId, LocalDateTime now, Pageable pageable);
 
     @Query("SELECT r FROM Reserva r WHERE r.usuario.id = :usuarioId AND r.fecha < :fechaLimite")

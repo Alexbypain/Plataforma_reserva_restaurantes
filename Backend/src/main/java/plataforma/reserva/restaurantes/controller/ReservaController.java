@@ -10,6 +10,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import plataforma.reserva.restaurantes.domain.ValidacionException;
 import plataforma.reserva.restaurantes.domain.dto.*;
 import plataforma.reserva.restaurantes.domain.entities.Reserva;
@@ -24,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/reservas")
@@ -119,5 +122,14 @@ public class ReservaController {
         return ResponseEntity.ok(reservas.map(DatosListadoRestaurantesHoy::new));
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DatosListadoReserva> obtenerReserva(@PathVariable Long id) {
+        // Aquí debería estar el log que agregamos
+        Reserva reserva = reservaRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
+
+        return ResponseEntity.ok(new DatosListadoReserva(reserva));
+    }
 
 }

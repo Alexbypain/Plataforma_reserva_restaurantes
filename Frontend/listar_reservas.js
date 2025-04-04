@@ -79,8 +79,8 @@ document.addEventListener("DOMContentLoaded", function() {
                             <p><strong>Requisitos:</strong> ${reserva.requisitosEspeciales}</p>
                             <p><strong>Alergias:</strong> ${reserva.alergias}</p>
                         </div>
-                        <button class="btn btn-success editar" data-id="${reserva.reserva_id}" style="display: none;">
-                            Editar
+                        <button class="btn btn-success editar" data-id="${reserva.reserva_id}">
+                            Modificar
                         </button>
                         <button class="btn btn-danger eliminar" data-id="${reserva.reserva_id}">
                             Eliminar

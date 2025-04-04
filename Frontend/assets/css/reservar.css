@@ -63,6 +63,11 @@ h2 {
     margin-bottom: 20px;
 }
 
+h3 {
+    color: #eba474;
+    margin-bottom: 16px;
+}
+
 /* Centrar el formulario */
 form {
     display: flex;
