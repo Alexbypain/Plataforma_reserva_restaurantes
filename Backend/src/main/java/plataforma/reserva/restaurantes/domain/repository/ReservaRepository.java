@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 public interface ReservaRepository extends JpaRepository<Reserva,Long> {
 
-    @Query("SELECT r FROM Reserva r WHERE r.usuario.id = :usuarioId AND r.fecha > :now")
+    @Query("SELECT r FROM Reserva r WHERE r.usuario.id = :usuarioId AND r.fecha >= :now")
     Page<Reserva> findByUsuarioIdAndUpcomingReservations(Long usuarioId, LocalDateTime now, Pageable pageable);
 
 
