@@ -1,4 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const mensajeExito = localStorage.getItem("mensajeExito");
+
+    if (mensajeExito) {
+        const contenedor = document.getElementById("mensajeExito");
+        if (contenedor) {
+            contenedor.textContent = mensajeExito;
+            contenedor.classList.remove("d-none");
+
+            setTimeout(() => {
+                contenedor.classList.add("d-none");
+            }, 2000);
+        }
+        localStorage.removeItem("mensajeExito");
+    }
+
+
     // 🔹 Obtener el token y extraer usuario_id
     const token = localStorage.getItem("jwtToken");
     if (!token) {

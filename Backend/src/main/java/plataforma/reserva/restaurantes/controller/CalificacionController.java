@@ -71,6 +71,36 @@ public class CalificacionController {
         return ResponseEntity.ok(Collections.singletonMap("mensaje", "La calificacion ha sido creada exitosamente"));
     }
 
+    @GetMapping("/reservas")
+    public ResponseEntity<Page<DatosListadoCalificacion>> listarHistorialCalificacionesPorRestaurante(
+            @RequestParam Long usuario_id,
+            @PageableDefault(size = 5) Pageable paginacion) {
+
+        Usuario admin=usuarioRepository.findById(Long.valueOf(usuario_id)).get();
+
+        Restaurante restaurante=restauranteRepository.findByAdministrador(admin);
+
+        List<Reserva> reservas=reservaRepository.findByRestaurante(restaurante);
+
+        // 🔹 Mapear a DTO solo las que tienen calificación asociada
+        List<DatosListadoCalificacion> calificaciones = reservas.stream()
+                .filter(reserva -> reserva.getCalificacion() != null)
+                .map(reserva -> new DatosListadoCalificacion(reserva.getCalificacion()))
+                .toList();
+
+        // Paginar manualmente
+        int start = (int) paginacion.getOffset();
+        int end = Math.min((start + paginacion.getPageSize()), calificaciones.size());
+
+        Page<DatosListadoCalificacion> page = new PageImpl<>(
+                calificaciones.subList(start, end),
+                paginacion,
+                calificaciones.size()
+        );
+
+        return ResponseEntity.ok(page);
+    }
+
 
 
 }
