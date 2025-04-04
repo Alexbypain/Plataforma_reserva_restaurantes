@@ -1,23 +1,24 @@
-document.addEventListener("DOMContentLoaded", function() {
-    // Mostrar datos del restaurante (opcional)
-    const restauranteId = localStorage.getItem("restaurante_id");
-    const restauranteNombre = localStorage.getItem("restaurante_nombre");
-    const infoRestaurante = document.getElementById("infoRestaurante");
-  
+document.addEventListener("DOMContentLoaded", function () {
+    const mensajeExito = document.getElementById("mensajeExito");
+    const mensajeError = document.getElementById("mensajeError");
 
-    // Obtener el reserva_id almacenado
+    function mostrarMensaje(mensajeElemento, texto) {
+        mensajeElemento.textContent = texto;
+        mensajeElemento.classList.remove("d-none");
+    }
+
     const reservaId = localStorage.getItem("reserva_id");
     if (!reservaId) {
-        alert("No se encontró información de la reserva a calificar.");
-        // Redirigir o manejar el error según corresponda
+        mostrarMensaje(mensajeError, "❌ No se encontró información de la reserva a calificar.");
         return;
     }
 
-    // Obtener el token y extraer usuario_id
     const token = localStorage.getItem("jwtToken");
     if (!token) {
-        alert("Debe iniciar sesión primero");
-        window.location.href = "login.html";
+        mostrarMensaje(mensajeError, "❌ Debe iniciar sesión primero");
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 2000);
         return;
     }
 
@@ -31,33 +32,37 @@ document.addEventListener("DOMContentLoaded", function() {
             return JSON.parse(jsonPayload);
         } catch (error) {
             console.error("Error al decodificar el token:", error);
+            mostrarMensaje(mensajeError, "❌ Token inválido o falta información de usuario");
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 2000);
             return null;
         }
     }
 
     const decodedToken = parseJwt(token);
     if (!decodedToken || !decodedToken.id) {
-        alert("Token inválido o falta información de usuario");
-        window.location.href = "login.html";
+        mostrarMensaje(mensajeError, "❌ Token inválido o falta información de usuario");
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 2000);
         return;
     }
 
     const usuarioId = decodedToken.id.toString();
 
-    // Manejo del envío del formulario de calificación
     const formCalificar = document.getElementById("formCalificar");
-    formCalificar.addEventListener("submit", function(event) {
+    formCalificar.addEventListener("submit", function (event) {
         event.preventDefault();
-        
+
         const comentario = document.getElementById("comentario").value.trim();
         const rating = document.getElementById("rating").value;
 
         if (!comentario || !rating) {
-            alert("Por favor, completa todos los campos.");
+            mostrarMensaje(mensajeError, "❌ Por favor, completa todos los campos.");
             return;
         }
 
-        // Construir el JSON a enviar
         const payload = {
             usuario_id: usuarioId,
             reserva_id: reservaId,
@@ -65,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function() {
             rating: Number(rating)
         };
 
-        // Realizar la petición POST
         fetch("http://localhost:8080/calificaciones", {
             method: "POST",
             headers: {
@@ -74,20 +78,19 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             body: JSON.stringify(payload)
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Error al enviar la calificación");
-            }
-            return response.json();
-        })
-        .then(data => {
-            alert("¡Calificación enviada con éxito!");
-            // Opcional: redirigir a otra página o limpiar el formulario
-            window.location.href = "historial_reservas.html";
-        })
-        .catch(error => {
-            console.error("❌ Error al enviar la calificación:", error);
-            alert("Ocurrió un error al enviar la calificación. Inténtalo de nuevo.");
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error al enviar la calificación");
+                }
+                return response.json();
+            })
+            .then(data => {
+                localStorage.setItem("mensajeExito", "✅ ¡Tu calificación ha sido enviada con éxito!");
+                window.location.href = "historial_reservas.html";
+            })
+            .catch(error => {
+                console.error("❌ Error al enviar la calificación:", error);
+                mostrarMensaje(mensajeError, "❌ Ocurrió un error al enviar la calificación. Inténtalo de nuevo.");
+            });
     });
 });

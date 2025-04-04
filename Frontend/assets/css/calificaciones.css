@@ -1,0 +1,26 @@
+/* Estilos específicos para las tarjetas de calificaciones */
+.card {
+    background-color: #29293d;
+    color: #ffffff;
+    border-radius: 15px;
+    border-left: 5px solid #ff7300;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.card .card-title.rating {
+    color: #ffcc00;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.card-text {
+    color: #ffffff;
+}
+
+.text-muted {
+    color: #bbbbbb !important;
+}

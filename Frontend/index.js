@@ -40,10 +40,32 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("userName").textContent = payload.sub;
 
         // ✅ Mostrar enlaces de admin si el rol es ADMIN (0)
-        if (payload.roles === 0) {
-            document.getElementById("adminLink").style.display = "inline-block";
-            document.getElementById("adminDropdown").style.display = "block";
+        if (payload) {
+            document.getElementById("userName").textContent = payload.sub;
+        
+            // Mostrar opciones para el rol ADMIN (0)
+            if (payload.roles === 0) {
+                document.getElementById("adminLink").style.display = "inline-block";
+                document.getElementById("adminDropdown").style.display = "block";
+            }
+        
+            // Mostrar enlaces de Restaurante y Reservas solo si es rol USER (1)
+            if (payload.roles === 1) {
+                const restauranteLink = document.getElementById("userRestauranteLink");
+                const reservasLink = document.getElementById("userReservasLink");
+        
+                if (restauranteLink) restauranteLink.style.display = "inline-block";
+                if (reservasLink) reservasLink.style.display = "inline-block";
+            } else {
+                // Ocultar explícitamente si no es rol USER
+                const restauranteLink = document.getElementById("userRestauranteLink");
+                const reservasLink = document.getElementById("userReservasLink");
+        
+                if (restauranteLink) restauranteLink.style.display = "none";
+                if (reservasLink) reservasLink.style.display = "none";
+            }
         }
+        
     } else {
         localStorage.removeItem("jwtToken");
         window.location.href = "login.html";
