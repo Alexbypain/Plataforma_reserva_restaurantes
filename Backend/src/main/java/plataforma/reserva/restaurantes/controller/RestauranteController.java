@@ -68,6 +68,7 @@ public class RestauranteController {
     @GetMapping
     public ResponseEntity<Page<DatosListadoRestaurantes>> listadoRestaurantes(@PageableDefault(size = 5) Pageable paginacion) {
 //        return medicoRepository.findAll(paginacion).map(DatosListadoMedico::new);
+
         return ResponseEntity.ok(restauranteRepository.findAll(paginacion).map(DatosListadoRestaurantes::new));
         // return ResponseEntity.ok(topicoRepository.findAllByStatus(ACTIVE,paginacion).map(DatosListadoTopico::new));
     }

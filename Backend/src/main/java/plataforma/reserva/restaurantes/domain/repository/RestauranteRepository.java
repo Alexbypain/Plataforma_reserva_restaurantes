@@ -3,6 +3,7 @@ package plataforma.reserva.restaurantes.domain.repository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,8 @@ import plataforma.reserva.restaurantes.domain.entities.Usuario;
 
 public interface RestauranteRepository extends JpaRepository<Restaurante,Long> { 
    Restaurante findByAdministrador (Usuario usuarioId);
-}   
+
+   Page<Restaurante> findAllByOrderByRatingByDesc(Pageable pageable);
+
+
+}

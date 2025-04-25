@@ -26,4 +26,13 @@ public interface ReservaRepository extends JpaRepository<Reserva,Long> {
     Page<Reserva> findByRestauranteIdAndUpcomingReservations(@Param("restauranteId") Long restauranteId, @Param("fecha") LocalDate fecha,   Pageable pageable);
 
     List<Reserva> findByRestaurante(Restaurante restaurante);
+
+    @Query("""
+       SELECT AVG(r.calificacion.rating)
+       FROM Reserva r
+       WHERE r.restaurante.id = :restauranteId
+         AND r.calificacion IS NOT NULL
+       """)
+    Double obtenerPromedioCalificacionPorRestaurante(@Param("restauranteId") Long restauranteId);
+
 }
