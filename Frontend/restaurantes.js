@@ -30,7 +30,7 @@ function cargarRestaurantes() {
         return;
     }
 
-    fetch("http://localhost:8080/restaurantes", {
+    fetch("http://localhost:8080/restaurantes?page=0&size=50&sort=rating,desc", {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`,
@@ -59,6 +59,10 @@ function cargarRestaurantes() {
                 return;
             }
 
+            const ratingHtml = (restaurante.rating != "null")
+             ? `${restaurante.rating} <span class="star">★</span>`
+             : 'No ha sido calificado';
+
             const card = document.createElement("div");
             card.classList.add("col-md-4");
 
@@ -71,6 +75,7 @@ function cargarRestaurantes() {
                     <img src="${imagenSrc}" class="card-img-top" alt="${restaurante.nombre}">
                     <div class="card-body text-center">
                         <h5 class="card-title">${restaurante.nombre}</h5>
+                        <p class="calificacion">${ratingHtml}</p>
                         <p class="rating">${restaurante.direccion}</p>
                         <button class="btn btn-primary mt-2 reservar-btn" 
                             data-id="${restaurante.restaurante_id}" 

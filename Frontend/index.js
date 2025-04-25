@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // ✅ Obtener restaurantes
-    fetch("http://localhost:8080/restaurantes", {
+    fetch("http://localhost:8080/restaurantes?page=0&size=4&sort=rating,desc", {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`,
@@ -105,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <img src="${imagenSrc}" class="card-img-top" alt="${restaurante.nombre}">
                     <div class="card-body text-center">
                         <h5 class="card-title">${restaurante.nombre}</h5>
+                        <p class="rating">${restaurante.rating} <span class="star">★</span> </p>
                         <p class="rating">${restaurante.direccion}</p>
                     </div>
                 </div>

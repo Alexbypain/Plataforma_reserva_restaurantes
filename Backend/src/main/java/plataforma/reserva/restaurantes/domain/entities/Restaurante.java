@@ -29,6 +29,7 @@ public class Restaurante {
     private LocalTime horario_apertura;
     private LocalTime horario_cierre;
 
+    private Double rating;
     @Lob
     @Column(columnDefinition = "LONGBLOB") // Para bases de datos MySQL/MariaDB
     private byte[] imagen;
