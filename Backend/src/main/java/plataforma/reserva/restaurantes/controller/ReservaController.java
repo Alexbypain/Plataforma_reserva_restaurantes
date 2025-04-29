@@ -116,7 +116,7 @@ public class ReservaController {
         @RequestParam Long usuario_id,
         @PageableDefault(size = 5) Pageable paginacion) {
         Usuario administrador = usuarioRepository.findById(usuario_id).get();
-        Restaurante restaurantes = restauranteRepository.findByAdministrador(administrador).get();
+        Restaurante restaurantes = restauranteRepository.findByAdministrador(administrador);
         var restaurante_id = restaurantes.getId();
         Page<Reserva> reservas = reservaRepository.findByRestauranteIdAndUpcomingReservations(restaurante_id,LocalDate.now(), paginacion);
         return ResponseEntity.ok(reservas.map(DatosListadoRestaurantesHoy::new));

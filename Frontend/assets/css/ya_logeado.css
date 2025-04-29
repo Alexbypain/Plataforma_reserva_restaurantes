@@ -215,3 +215,12 @@ body {
 .card-body p.text-muted {
     color: white !important;
 }
+
+/* En tu archivo CSS */
+
+  .rating .star {
+    color: gold;        /* amarillo dorado */
+    margin-left: 0.3rem;/* separa un poco la estrella del número */
+    font-size: 1.2rem;  /* ajusta el tamaño de la estrella si quieres */
+  }
+  

@@ -1,6 +1,7 @@
 package plataforma.reserva.restaurantes.controller;
 
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import plataforma.reserva.restaurantes.domain.repository.CalificacionRepository;
 import plataforma.reserva.restaurantes.domain.repository.ReservaRepository;
 import plataforma.reserva.restaurantes.domain.repository.RestauranteRepository;
 import plataforma.reserva.restaurantes.domain.repository.UsuarioRepository;
+import plataforma.reserva.restaurantes.services.RestauranteService;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -42,7 +44,10 @@ public class CalificacionController {
     @Autowired
     private RestauranteRepository restauranteRepository;
 
+    @Autowired
+    private RestauranteService restauranteService;
 
+    @Transactional
     @PostMapping
     public ResponseEntity crearCalificacion(@RequestBody @Valid DatosCrearCalificacion datosCrearCalificacion){
         Calificacion calificacion=new Calificacion();
@@ -64,7 +69,14 @@ public class CalificacionController {
         }
         // Ahora asocia la calificación a la reserva
         reserva.setCalificacion(calificacion);
-        reservaRepository.save(reserva); // este paso es el que actualiza la FK en la base de datos
+
+        Restaurante restaurante=reserva.getRestaurante();
+
+        var promedio=restauranteService.calcularPromedioCalificaciones(restaurante.getId());
+
+        restaurante.setRating(promedio);
+
+         // este paso es el que actualiza la FK en la base de datos
 
 
 

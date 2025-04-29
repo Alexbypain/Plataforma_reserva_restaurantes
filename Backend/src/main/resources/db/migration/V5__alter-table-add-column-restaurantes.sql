@@ -1,0 +1,2 @@
+ALTER TABLE restaurantes
+ADD COLUMN rating BIGINT CHECK (rating BETWEEN 1 AND 5);
