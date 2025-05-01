@@ -1,3 +1,13 @@
+// Solo redirección: NO toca restaurantes.js ni carga datos aquí
+document.getElementById("exploreBtn").addEventListener("click", () => {
+    const q = document.getElementById("searchInput").value.trim();
+    if (q) {
+      window.location.href = `restaurantes.html?restaurante_nombre=${encodeURIComponent(q)}`;
+    } else {
+      window.location.href = "restaurantes.html";
+    }
+  });
+
 document.addEventListener("DOMContentLoaded", function() {
     // ✅ Verificar mensaje de éxito
     const urlParams = new URLSearchParams(window.location.search);
@@ -37,16 +47,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const payload = parseJwt(token);
     if (payload) {
-        document.getElementById("userName").textContent = payload.sub;
+        document.getElementById("userName").textContent = payload.nombre;
 
         // ✅ Mostrar enlaces de admin si el rol es ADMIN (0)
         if (payload) {
-            document.getElementById("userName").textContent = payload.sub;
+            document.getElementById("userName").textContent = payload.nombre;
         
             // Mostrar opciones para el rol ADMIN (0)
             if (payload.roles === 0) {
                 document.getElementById("adminLink").style.display = "inline-block";
                 document.getElementById("adminDropdown").style.display = "block";
+                document.getElementById("adminReservasNowLink").style.display = "block";
+
             }
         
             // Mostrar enlaces de Restaurante y Reservas solo si es rol USER (1)
