@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import plataforma.reserva.restaurantes.domain.ValidacionException;
 import plataforma.reserva.restaurantes.domain.dto.*;
@@ -20,6 +22,7 @@ import plataforma.reserva.restaurantes.domain.entities.Usuario;
 import plataforma.reserva.restaurantes.domain.repository.ReservaRepository;
 import plataforma.reserva.restaurantes.domain.repository.RestauranteRepository;
 import plataforma.reserva.restaurantes.domain.repository.UsuarioRepository;
+import plataforma.reserva.restaurantes.services.PdfService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,6 +42,9 @@ public class ReservaController {
 
     @Autowired
     private ReservaRepository reservaRepository;
+
+    @Autowired
+    private PdfService pdfService;
 
     @PostMapping
     public ResponseEntity crearReserva(@RequestBody @Valid DatosCrearReserva datosCrearReserva){
@@ -132,4 +138,17 @@ public class ReservaController {
         return ResponseEntity.ok(new DatosListadoReserva(reserva));
     }
 
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<byte[]> descargarReservaPdf(@PathVariable Long id) {
+        Reserva reserva = reservaRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
+
+        byte[] pdfBytes = pdfService.generarPdfReserva(reserva);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "reserva_" + id + ".pdf");
+
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+    }
 }
