@@ -51,4 +51,5 @@ public class Reserva {
         this.requisitos_especiales= datos.requisitosEspeciales();
         this.alergias=datos.alergias();
     }
+    
 }

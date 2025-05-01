@@ -20,6 +20,7 @@ import plataforma.reserva.restaurantes.domain.entities.Usuario;
 import plataforma.reserva.restaurantes.domain.repository.ReservaRepository;
 import plataforma.reserva.restaurantes.domain.repository.RestauranteRepository;
 import plataforma.reserva.restaurantes.domain.repository.UsuarioRepository;
+import plataforma.reserva.restaurantes.domain.repository.PdfRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,6 +40,9 @@ public class ReservaController {
 
     @Autowired
     private ReservaRepository reservaRepository;
+
+    @Autowired
+    private PdfRepository pdfService;
 
     @PostMapping
     public ResponseEntity crearReserva(@RequestBody @Valid DatosCrearReserva datosCrearReserva){
@@ -130,6 +134,19 @@ public class ReservaController {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
 
         return ResponseEntity.ok(new DatosListadoReserva(reserva));
+    }
+
+    @GetMapping("/{id}/descargar")
+    public ResponseEntity<byte[]> descargarReservaPdf(@PathVariable Long id) {
+        Reserva reserva = reservaRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
+
+        byte[] pdfBytes = pdfService.generarPdfReserva(reserva);
+
+        return ResponseEntity.ok()
+            .header("Content-Disposition", "attachment; filename=Reserva_" + id + ".pdf")
+            .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+            .body(pdfBytes);
     }
 
 }
