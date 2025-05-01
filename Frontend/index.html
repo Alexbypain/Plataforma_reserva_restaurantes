@@ -24,11 +24,12 @@
           <span id="userName">Usuario</span>
         </button>
         <div class="dropdown-menu" id="menu">
-          <a href="#"><i class="fas fa-user-circle"></i> Perfil</a>
           <a href="listar_reservas.html" id="userReservasLink" style="display: none;">
             <i class="fas fa-calendar-alt"></i> Reservas
           </a>
-          <a href="listar_reservas_now.html"><i class="fas fa-calendar-alt"></i> Reservas del dia</a>
+          <a href="listar_reservas_now.html" id="adminReservasNowLink" style="display: none;">
+            <i class="fa-solid fa-cog"></i> Reservas del Dia
+          </a>
           <a href="crear_restaurante.html" id="adminDropdown" style="display: none;"><i class="fas fa-plus-circle"></i> Crear Restaurante</a>
           <a href="ver_calificaciones.html" id="adminLink" style="display: none;"><i class="fa-solid fa-cog"></i> Calificaciones</a>
           <a href="login.html"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
@@ -47,11 +48,14 @@
     <img src="assets/imagenes/ibague.jpg" alt="Fondo de pagina principal" class="hero-bg">
     <div class="hero-content">
       <h1>Descubre los Mejores Restaurantes de Ibagué</h1>
-      <p>Tu próxima experiencia gastronómica está a solo un clic de distancia. Encuentra los sabores que amas y reserva en segundos.</p>
-      <input type="text" class="form-control w-50 mx-auto" placeholder="Buscar por nombre, tipo de cocina...">
-      <button class="btn btn-warning mt-3">Explorar Restaurantes</button>
+      <p>Tu próxima experiencia gastronómica está a solo un clic de distancia.</p>
+      <input id="searchInput" type="text" class="form-control w-50 mx-auto" placeholder="Buscar por nombre">
+      <button id="exploreBtn" class="btn btn-warning mt-3">Explorar Restaurantes</button>
     </div>
   </header>
+
+  
+
 
   <!-- Beneficios -->
   <section class="container benefits">
@@ -71,5 +75,8 @@
   </div>
 
   <script src="index.js"></script> <!-- Script separado -->
+
+ 
+
 </body>
 </html>
