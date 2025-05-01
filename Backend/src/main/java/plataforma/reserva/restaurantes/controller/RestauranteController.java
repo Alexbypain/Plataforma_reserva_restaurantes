@@ -9,6 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import plataforma.reserva.restaurantes.domain.ValidacionException;
 import plataforma.reserva.restaurantes.domain.dto.DatosCrearRestaurante;
 import plataforma.reserva.restaurantes.domain.dto.DatosListadoReserva;
 import plataforma.reserva.restaurantes.domain.dto.DatosListadoRestaurantes;
@@ -20,6 +21,7 @@ import plataforma.reserva.restaurantes.domain.repository.ReservaRepository;
 import plataforma.reserva.restaurantes.domain.repository.RestauranteRepository;
 import plataforma.reserva.restaurantes.domain.repository.UsuarioRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Base64;
@@ -72,6 +74,18 @@ public class RestauranteController {
         return ResponseEntity.ok(restauranteRepository.findAll(paginacion).map(DatosListadoRestaurantes::new));
         // return ResponseEntity.ok(topicoRepository.findAllByStatus(ACTIVE,paginacion).map(DatosListadoTopico::new));
     }
+
+    @GetMapping("/nombre")
+    public ResponseEntity<Page<DatosListadoRestaurantes>> listadoRestaurantesPorNombre(
+            @RequestParam String restaurante_nombre,
+            @PageableDefault(size = 50) Pageable paginacion
+    ){
+        return ResponseEntity.ok(restauranteRepository.findByNombreContainingIgnoreCase(restaurante_nombre,paginacion).map(DatosListadoRestaurantes::new));
+
+
+
+    }
+
     
     
 }

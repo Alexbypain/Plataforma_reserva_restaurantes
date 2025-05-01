@@ -31,6 +31,7 @@ public class TokenService {
                     .withIssuer("foro hub")
                     .withSubject(usuario.getEmail())
                     .withClaim("id", usuario.getId())
+                    .withClaim("nombre", usuario.getNombre()) // agregar nombre personalizado
                     .withClaim("roles", usuario.getRol().ordinal())
                     .withExpiresAt(generarFechaExpiracion())
                     .sign(algorithm);
