@@ -19,7 +19,6 @@ import plataforma.reserva.restaurantes.domain.entities.Usuario;
 import plataforma.reserva.restaurantes.domain.repository.ReservaRepository;
 import plataforma.reserva.restaurantes.domain.repository.RestauranteRepository;
 import plataforma.reserva.restaurantes.domain.repository.UsuarioRepository;
-import plataforma.reserva.restaurantes.services.PdfService;
 
 
 
@@ -50,8 +49,6 @@ public class ReservaController {
     @Autowired
     private ReservaRepository reservaRepository;
 
-    @Autowired
-    private PdfService pdfService;
 
     @PostMapping
     public ResponseEntity crearReserva(@RequestBody @Valid DatosCrearReserva datosCrearReserva){
