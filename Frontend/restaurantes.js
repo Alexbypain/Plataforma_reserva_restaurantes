@@ -128,9 +128,11 @@ function mostrarMensajeExito() {
               <h5 class="card-title">${r.nombre}</h5>
               <p class="calificacion mb-1">${rating}</p>
               <p class="mb-3">${r.direccion}</p>
+              <p class="mb-3">Abierto de ${r.horario_apertura} a ${r.horario_cierre}</p>
               <button class="btn btn-primary mt-auto reservar-btn"
                 data-id="${r.restaurante_id}"
-                data-nombre="${r.nombre}">
+                data-nombre="${r.nombre}"
+                data-apertura="${r.horario_apertura}" data-cierre="${r.horario_cierre}">
                 Reservar
               </button>
             </div>
@@ -142,6 +144,9 @@ function mostrarMensajeExito() {
         btn.addEventListener("click", () => {
           localStorage.setItem("restaurante_id", btn.dataset.id);
           localStorage.setItem("restaurante_nombre", btn.dataset.nombre);
+          localStorage.setItem("horario_apertura", btn.dataset.apertura);
+            localStorage.setItem("horario_cierre", btn.dataset.cierre);
+
           window.location.href = "reservar.html";
         });
       });

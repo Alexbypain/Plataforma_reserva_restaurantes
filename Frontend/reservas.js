@@ -2,6 +2,16 @@ document.addEventListener("DOMContentLoaded", function() {
     // Recuperar los datos del restaurante desde localStorage
     const restauranteId = localStorage.getItem("restaurante_id");
     const restauranteNombre = localStorage.getItem("restaurante_nombre");
+    
+    // --- Nuevas líneas: recuperar horarios y asignar al input ---
+    const apertura = localStorage.getItem("horario_apertura");
+    const cierre   = localStorage.getItem("horario_cierre");
+    const inputHora = document.getElementById("hora");
+    if (inputHora && apertura && cierre) {
+        inputHora.min = apertura;
+        inputHora.max = cierre;
+    }
+    // ----------------------------------------------------------------
 
     console.log("Restaurante recuperado:", restauranteId, restauranteNombre);
 
@@ -71,6 +81,21 @@ document.getElementById("reservaForm").addEventListener("submit", function(event
     const restauranteId = document.getElementById("restauranteIdInput").value;
     const fecha = document.getElementById("fecha").value;
     const hora = document.getElementById("hora").value;
+
+    // --- Nueva validación: hora dentro de apertura y cierre ---
+    const apertura = localStorage.getItem("horario_apertura");
+    const cierre   = localStorage.getItem("horario_cierre");
+    if (hora < apertura || hora > cierre) {
+        Swal.fire({
+        icon: "error",
+        title: "Atencion",
+        text: `La hora debe estar entre ${apertura} y ${cierre}.`,
+        confirmButtonColor: "#004085" // azul oscuro para el botón
+        });
+        return;
+    }
+    // ----------------------------------------------------------------
+
     const motivo = document.getElementById("motivo").value;
     const cantidadPersonas = document.getElementById("cantidadPersonas").value;
     const requisitosEspeciales = document.getElementById("requisitosEspeciales").value;
@@ -117,4 +142,3 @@ document.getElementById("reservaForm").addEventListener("submit", function(event
     })
     .catch(error => console.error("Error al reservar:", error));
 });
-

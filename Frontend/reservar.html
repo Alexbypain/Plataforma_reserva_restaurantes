@@ -18,7 +18,7 @@
     
     <div class="container">
         <h2>Reservar en <span id="restauranteNombre"></span></h2>
-        <form id="reservaForm">
+        <form id="reservaForm" novalidate>
             <input type="hidden" id="restauranteIdInput">
             
             <label for="fecha">Fecha:</label>
@@ -44,5 +44,6 @@
     </div>
 </body>
 <script src="reservas.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </html>
