@@ -82,18 +82,33 @@ document.getElementById("reservaForm").addEventListener("submit", function(event
     const fecha = document.getElementById("fecha").value;
     const hora = document.getElementById("hora").value;
 
+    
+    console.log(hora);
     // --- Nueva validación: hora dentro de apertura y cierre ---
     const apertura = localStorage.getItem("horario_apertura");
     const cierre   = localStorage.getItem("horario_cierre");
-    if (hora < apertura || hora > cierre) {
-        Swal.fire({
-        icon: "error",
-        title: "Atencion",
-        text: `La hora debe estar entre ${apertura} y ${cierre}.`,
-        confirmButtonColor: "#004085" // azul oscuro para el botón
-        });
-        return;
-    }
+
+    // Función auxiliar para convertir "HH:mm" → minutos desde medianoche
+function horaAminutos(str) {
+    const [h, m] = str.split(":").map(Number);
+    return h * 60 + m;
+  }
+  
+  const aperturaMin = horaAminutos(apertura);
+  const cierreMin   = horaAminutos(cierre);
+  const horaMin     = horaAminutos(hora);
+  
+  console.log(`Minutos → apertura: ${aperturaMin}, cierre: ${cierreMin}, hora: ${horaMin}`);
+  
+  if (horaMin < aperturaMin || horaMin > cierreMin) {
+    Swal.fire({
+      icon: "error",
+      title: "Atención",
+      text: `La hora debe estar entre ${apertura} y ${cierre}.`,
+      confirmButtonColor: "#004085"
+    });
+    return;
+  }
     // ----------------------------------------------------------------
 
     const motivo = document.getElementById("motivo").value;

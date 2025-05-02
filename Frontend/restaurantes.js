@@ -121,6 +121,7 @@ function cargarRestaurantes() {
         const img = r.imagen
           ? `data:image/jpeg;base64,${r.imagen}`
           : "assets/imagenes/default-restaurante.jpg";
+       
   
         const col = document.createElement("div");
         col.className = "col-md-4 mb-4";
