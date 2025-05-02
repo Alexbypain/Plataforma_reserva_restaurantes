@@ -7,12 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 
 import plataforma.reserva.restaurantes.domain.ValidacionException;
 import plataforma.reserva.restaurantes.domain.dto.*;
@@ -24,12 +21,24 @@ import plataforma.reserva.restaurantes.domain.repository.RestauranteRepository;
 import plataforma.reserva.restaurantes.domain.repository.UsuarioRepository;
 import plataforma.reserva.restaurantes.services.PdfService;
 
+
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Optional;
+
+
 
 @RestController
 @RequestMapping("/reservas")
@@ -138,17 +147,6 @@ public class ReservaController {
         return ResponseEntity.ok(new DatosListadoReserva(reserva));
     }
 
-    @GetMapping("/{id}/pdf")
-    public ResponseEntity<byte[]> descargarReservaPdf(@PathVariable Long id) {
-        Reserva reserva = reservaRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
 
-        byte[] pdfBytes = pdfService.generarPdfReserva(reserva);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("attachment", "reserva_" + id + ".pdf");
-
-        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-    }
 }
