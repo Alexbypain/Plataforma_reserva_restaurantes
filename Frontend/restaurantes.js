@@ -16,13 +16,6 @@ function mostrarMensajeExito() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    mostrarMensajeExito();
-    cargarRestaurantes();
-});
-
-
-
 function cargarRestaurantes() {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
