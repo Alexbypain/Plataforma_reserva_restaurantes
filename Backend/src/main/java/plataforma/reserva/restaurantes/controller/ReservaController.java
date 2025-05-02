@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,6 +19,17 @@ import plataforma.reserva.restaurantes.domain.entities.Usuario;
 import plataforma.reserva.restaurantes.domain.repository.ReservaRepository;
 import plataforma.reserva.restaurantes.domain.repository.RestauranteRepository;
 import plataforma.reserva.restaurantes.domain.repository.UsuarioRepository;
+import plataforma.reserva.restaurantes.services.PdfService;
+
+
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +37,8 @@ import java.time.LocalTime;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Optional;
+
+
 
 @RestController
 @RequestMapping("/reservas")
@@ -39,6 +51,9 @@ public class ReservaController {
 
     @Autowired
     private ReservaRepository reservaRepository;
+
+    @Autowired
+    private PdfService pdfService;
 
     @PostMapping
     public ResponseEntity crearReserva(@RequestBody @Valid DatosCrearReserva datosCrearReserva){
@@ -131,5 +146,7 @@ public class ReservaController {
 
         return ResponseEntity.ok(new DatosListadoReserva(reserva));
     }
+
+
 
 }
