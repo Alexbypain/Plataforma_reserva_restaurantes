@@ -17,5 +17,7 @@ import plataforma.reserva.restaurantes.domain.entities.Usuario;
 public interface RestauranteRepository extends JpaRepository<Restaurante,Long> { 
    Restaurante findByAdministrador (Usuario usuarioId);
 
+   Page<Restaurante> findByNombreContainingIgnoreCase(String restaurante_nombre, Pageable pageable);
+
 
 }

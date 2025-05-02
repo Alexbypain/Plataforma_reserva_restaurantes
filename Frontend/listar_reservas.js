@@ -85,6 +85,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         <button class="btn btn-danger eliminar" data-id="${reserva.reserva_id}">
                             Eliminar
                         </button>
+                        <button class="btn btn-info exportar mt-2" data-id="${reserva.reserva_id}">
+                            Exportar PDF
+                        </button>
                     </div>
                 </div>
             `;
@@ -147,6 +150,88 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
 
+        // Agregar evento al botón "Exportar PDF"
+        document.querySelectorAll(".exportar").forEach(button => {
+            button.addEventListener("click", function () {
+                const reservaId = this.getAttribute("data-id");
+                const btn = this;
+                btn.disabled = true;
+                btn.textContent = "Generando PDF...";
+
+                fetch(`http://localhost:8080/reservas/${reservaId}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error("No se pudo obtener la reserva");
+                    return res.json();
+                })
+                .then(reserva => {
+                    console.log(reserva)
+                    const pdfContent = `
+                        <div style="font-family: Arial, sans-serif; padding: 30px; border: 1px solid #ccc; color: #333;">
+                            <h1 style="color:#4A90E2; font-weight:bold; text-align: center; margin-bottom: 20px;">RESUMEN DE RESERVA</h1>
+                            <hr style="border-top: 2px solid #bbb; margin-bottom: 20px;">
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                                <tbody>
+                                    <tr>
+                                        <th style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">Restaurante</th>
+                                        <td style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">${reserva.nombre_restaurante}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">Fecha</th>
+                                        <td style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">${reserva.fecha.replace("T", " a las ")}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">Motivo</th>
+                                        <td style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">${reserva.motivo}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">Personas</th>
+                                        <td style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">${reserva.cantidadPersonas} personas</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">Requisitos Especiales</th>
+                                        <td style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">${reserva.requisitosEspeciales}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">Alergias</th>
+                                        <td style="background-color: #f8f8f8; color: #555; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase;">${reserva.alergias}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+
+                     // Inyectar contenido en el contenedor oculto
+                    const container = document.getElementById("pdfContainer");
+                    container.innerHTML = pdfContent;
+
+                    const opt = {
+                        margin:     0.5,
+                        filename:   `reserva_${reserva.reserva_id}.pdf`,
+                        image:      { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2 },
+                        jsPDF:      { unit: 'in', format: 'letter', orientation: 'landscape' } // Cambiado a 'landscape'
+                    };
+
+                    html2pdf().from(pdfContent).set(opt).save().then(() => {
+                        alert("✅ PDF exportado exitosamente");
+                        btn.disabled = false;
+                        btn.textContent = "Exportar PDF";
+                    });
+                })
+                .catch(err => {
+                    console.error("❌ Error exportando PDF:", err);
+                    alert("Ocurrió un error al generar el PDF");
+                    btn.disabled = false;
+                    btn.textContent = "Exportar PDF";
+                });
+            });
+        });
     })
     .catch(error => console.error("❌ Error al obtener reservas:", error));
 
