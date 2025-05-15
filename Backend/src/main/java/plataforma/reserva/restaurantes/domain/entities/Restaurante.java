@@ -3,7 +3,10 @@ package plataforma.reserva.restaurantes.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import plataforma.reserva.restaurantes.domain.dto.DatosActualizarReserva;
+import plataforma.reserva.restaurantes.domain.dto.DatosActualizarRestaurante;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -43,6 +46,14 @@ public class Restaurante {
     @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reserva> reservas;
 
+
+    public void actualizarInformaciones(DatosActualizarRestaurante datos) {
+        this.capacidad= Integer.parseInt(datos.capacidad());
+        this.direccion=datos.direccion();
+        this.email= datos.email();
+        this.horario_apertura= LocalTime.parse(datos.horario_apertura());
+        this.horario_cierre= LocalTime.parse(datos.horario_cierre());
+    }
 
 
 }
