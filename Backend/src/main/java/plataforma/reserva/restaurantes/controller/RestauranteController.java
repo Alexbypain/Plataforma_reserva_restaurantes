@@ -1,6 +1,7 @@
 package plataforma.reserva.restaurantes.controller;
 
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import plataforma.reserva.restaurantes.domain.ValidacionException;
-import plataforma.reserva.restaurantes.domain.dto.DatosCrearRestaurante;
-import plataforma.reserva.restaurantes.domain.dto.DatosListadoReserva;
-import plataforma.reserva.restaurantes.domain.dto.DatosListadoRestaurantes;
-import plataforma.reserva.restaurantes.domain.dto.DatosListadoRestaurantesHoy;
+import plataforma.reserva.restaurantes.domain.dto.*;
 import plataforma.reserva.restaurantes.domain.entities.Reserva;
 import plataforma.reserva.restaurantes.domain.entities.Restaurante;
 import plataforma.reserva.restaurantes.domain.entities.Usuario;
@@ -86,6 +84,32 @@ public class RestauranteController {
 
     }
 
-    
-    
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<DatosRespuestaRestauranteActualizado> actualizar(@RequestBody @Valid DatosActualizarRestaurante datosActualizarRestaurante, @PathVariable Long id) {
+
+        var admin=usuarioRepository.findById(id);
+
+        var restaurante=restauranteRepository.findByAdministrador(admin.get());
+
+
+        if(!restauranteRepository.existsById(restaurante.getId())){
+            throw new ValidacionException("No existe un restaurante con el id informado");
+        }
+
+
+        if (datosActualizarRestaurante.imagen() != null && !datosActualizarRestaurante.imagen().isEmpty()) {
+            byte[] imagenBytes = Base64.getDecoder().decode(datosActualizarRestaurante.imagen());
+            restaurante.setImagen(imagenBytes);
+        }
+
+        restaurante.actualizarInformaciones(datosActualizarRestaurante);
+        var restauranteActualizado= new DatosRespuestaRestauranteActualizado(restaurante);
+        return ResponseEntity.ok(restauranteActualizado);
+    }
+
+
+
+
+
 }
