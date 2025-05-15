@@ -60,6 +60,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById("adminReservasNowLink").style.display = "block";
 
             }
+
+            
         
             // Mostrar enlaces de Restaurante y Reservas solo si es rol USER (1)
             if (payload.roles === 1) {
