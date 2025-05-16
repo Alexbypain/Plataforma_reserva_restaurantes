@@ -44,10 +44,10 @@ body {
     gap: 20px;
 }
 
-/* Botón de usuario */
+/* Mejoras en el botón de usuario */
 .login-button {
-    background-color: #ffcc00;
-    color: #000;
+    background-color: #ffcc00; /* Amarillo */
+    color: #000; /* Texto negro */
     padding: 10px 15px;
     border-radius: 8px;
     font-weight: bold;
@@ -57,11 +57,11 @@ body {
 }
 
 .login-button:hover {
-    background-color: #ff9900;
+    background-color: #ff9900; /* Naranja oscuro */
     color: #fff;
 }
 
-/* Menú desplegable */
+/* Estilos del menú desplegable */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -131,16 +131,9 @@ body {
     font-weight: 300;
 }
 
-.sub-text {
-    font-size: 1.1rem;
-    font-weight: 300;
-    opacity: 0.9;
-}
-
-.search-box input {
+.form-control {
     border-radius: 25px;
     border: none;
-    box-shadow: 0px 0px 8px rgba(255, 255, 255, 0.2);
 }
 
 .btn-warning {
@@ -158,11 +151,76 @@ body {
     background-color: #e65c00;
 }
 
-/* Beneficios con íconos */
-.benefits .fas {
-    margin-bottom: 10px;
+/* Estilos para las tarjetas */
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+    background-color: #29293d;
+    color: rgb(206, 215, 22);
 }
 
-.benefits p {
-    font-size: 1rem;
+.card:hover {
+    transform: scale(1.05);
 }
+
+.card img {
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 5px solid #ff7300;
+}
+
+.rating {
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+ /* Añade estos estilos en el head */
+ .success-message {
+    position: fixed;
+    top: 50%;               /* Centra verticalmente */
+    left: 50%;              /* Centra horizontalmente */
+    transform: translate(-50%, -50%); /* Ajusta el centro exacto */
+    background-color: #4CAF50; /* Verde */
+    color: white;
+    padding: 15px 25px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 2000;          /* Mayor que el navbar (1000) */
+    text-align: center;
+    display: none;          /* Oculto por defecto */
+    animation: slideIn 0.5s ease-out; /* Animación de entrada */
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.success-message i {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.close-btn {
+    margin-left: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    padding-left: 15px;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes slideIn {
+    from { top: -100px; opacity: 0; }
+    to { top: 50%; opacity: 1; } /* Ajustado para que coincida con la posición final */
+}
+
+.card-body p.text-muted {
+    color: white !important;
+}
+
+/* En tu archivo CSS */
+
+  .rating .star {
+    color: gold;        /* amarillo dorado */
+    margin-left: 0.3rem;/* separa un poco la estrella del número */
+    font-size: 1.2rem;  /* ajusta el tamaño de la estrella si quieres */
+  }
+  

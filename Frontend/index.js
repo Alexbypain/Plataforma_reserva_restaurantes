@@ -56,9 +56,14 @@ document.addEventListener("DOMContentLoaded", function() {
             // Mostrar opciones para el rol ADMIN (0)
             if (payload.roles === 0) {
                 document.getElementById("adminLink").style.display = "inline-block";
-                document.getElementById("adminDropdown").style.display = "block";
                 document.getElementById("adminReservasNowLink").style.display = "block";
 
+            }
+
+            if(payload.restaurante) {
+                 
+            }else{
+                document.getElementById("adminDropdown").style.display = "block";
             }
         
             // Mostrar enlaces de Restaurante y Reservas solo si es rol USER (1)

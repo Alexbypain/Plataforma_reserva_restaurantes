@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -25,17 +26,26 @@ public class TokenService {
 
 
     public String generarToken(Usuario usuario) {
-        try {
+    try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
-            return JWT.create()
+
+            JWTCreator.Builder tokenBuilder = JWT.create()
                     .withIssuer("foro hub")
                     .withSubject(usuario.getEmail())
                     .withClaim("id", usuario.getId())
-                    .withClaim("nombre", usuario.getNombre()) // agregar nombre personalizado
+                    .withClaim("nombre", usuario.getNombre())
                     .withClaim("roles", usuario.getRol().ordinal())
-                    .withExpiresAt(generarFechaExpiracion())
-                    .sign(algorithm);
-        } catch (JWTCreationException exception){
+                    .withExpiresAt(generarFechaExpiracion());
+
+            // Verificar si el restaurante es null antes de agregar el claim
+            if (usuario.getRestaurante() != null) {
+                tokenBuilder.withClaim("restaurante", usuario.getRestaurante().getNombre());
+            } else {
+                tokenBuilder.withClaim("restaurante", (String) null);
+            }
+
+            return tokenBuilder.sign(algorithm);
+        } catch (JWTCreationException exception) {
             throw new RuntimeException();
         }
     }
