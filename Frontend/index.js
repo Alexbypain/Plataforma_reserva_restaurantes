@@ -60,10 +60,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
             }
 
-            if(!payload.restaurante){
-                 document.getElementById("adminDropdown").style.display = "block";
-            }
-
+        
+            
+           
             
         
             // Mostrar enlaces de Restaurante y Reservas solo si es rol USER (1)
@@ -73,6 +72,14 @@ document.addEventListener("DOMContentLoaded", function() {
         
                 if (restauranteLink) restauranteLink.style.display = "inline-block";
                 if (reservasLink) reservasLink.style.display = "inline-block";
+
+                if(!payload.restaurante){
+                    document.getElementById("adminDropdown").style.display = "block";
+                }else{
+                    document.getElementById("adminModificar").style.display = "block";
+                    
+                }
+                
             } else {
                 // Ocultar explícitamente si no es rol USER
                 const restauranteLink = document.getElementById("userRestauranteLink");
