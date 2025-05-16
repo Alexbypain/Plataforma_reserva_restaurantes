@@ -1,6 +1,7 @@
 package plataforma.reserva.restaurantes.infra.security;
 
 
+import com.auth0.jwt.JWTCreator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import plataforma.reserva.restaurantes.domain.entities.Usuario;
@@ -8,6 +9,7 @@ import plataforma.reserva.restaurantes.domain.entities.Usuario;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Map;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;

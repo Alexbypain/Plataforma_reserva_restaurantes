@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Nuevo Restaurante</title>
+    <link rel="stylesheet" href="assets/css/crear_restaurantes.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        #imagenPreview {
+            max-width: 200px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Crear Nuevo Restaurante</h1>
+    
+    <form id="restauranteForm">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" >
+        </div>
+
+        <div class="form-group">
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" >
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" >
+        </div>
+
+        <div class="form-group">
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" >
+        </div>
+
+        <div class="form-group">
+            <label for="capacidad">Capacidad:</label>
+            <input type="number" id="capacidad" >
+        </div>
+
+        <div class="form-group">
+            <label for="horario_apertura">Horario Apertura:</label>
+            <input type="time" id="horario_apertura" >
+        </div>
+
+        <div class="form-group">
+            <label for="horario_cierre">Horario Cierre:</label>
+            <input type="time" id="horario_cierre" >
+        </div>
+
+        <div class="form-group">
+            <label for="imagen">Imagen:</label>
+            <input type="file" id="imagen" accept="image/*" >
+            <img id="imagenPreview" src="#" alt="Vista previa de la imagen" style="display: none;">
+        </div>
+
+        <button type="submit">Crear Restaurante</button>
+    </form>
+
+    <script>
+        // Función para decodificar el JWT
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error decodificando JWT:', error);
+                return null;
+            }
+        }
+
+        // Vista previa de la imagen
+        document.getElementById('imagen').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('imagenPreview');
+            
+            if (file && file.type.match('image.*')) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+                alert('Por favor seleccione una imagen válida');
+            }
+        });
+
+        // Manejo del formulario
+        document.getElementById('restauranteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Obtener y validar token
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                alert('Debe iniciar sesión primero');
+                return;
+            }
+
+            // Decodificar JWT
+            const decodedToken = parseJwt(token);
+            if (!decodedToken || !decodedToken.id) {
+                alert('Token inválido o falta información de usuario');
+                return;
+            }
+
+            // Convertir imagen a Base64
+            const file = document.getElementById('imagen').files[0];
+            let imagenBase64 = '';
+            
+            if (file) {
+                try {
+                    imagenBase64 = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result.split(',')[1]);
+                        reader.onerror = error => reject(error);
+                        reader.readAsDataURL(file);
+                    });
+                } catch (error) {
+                    alert('Error al procesar la imagen');
+                    return;
+                }
+            }
+
+            admin_id= decodedToken.id;
+
+            // Construir objeto del restaurante
+            const restaurante = {
+                administrador_id: decodedToken.id.toString(),
+                nombre: document.getElementById('nombre').value,
+                direccion: document.getElementById('direccion').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                capacidad: document.getElementById('capacidad').value,
+                horario_apertura: document.getElementById('horario_apertura').value + ':00',
+                horario_cierre: document.getElementById('horario_cierre').value + ':00',
+                imagen: imagenBase64
+            };
+
+            try {
+                const response = await fetch(`http://localhost:8080/restaurantes/${admin_id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(restaurante)
+                });
+
+                if (response.ok) {
+                    // Redirección con parámetro de éxito
+                    window.location.href = 'index.html?success=restaurante-modificado';
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message || 'Error al crear el restaurante'}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error de conexión con el servidor');
+            }
+        });
+    </script>
+</body>
+</html>
