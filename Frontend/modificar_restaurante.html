@@ -55,42 +55,42 @@
     <form id="restauranteForm">
         <div class="form-group">
             <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" required>
+            <input type="text" id="nombre" >
         </div>
 
         <div class="form-group">
             <label for="direccion">Dirección:</label>
-            <input type="text" id="direccion" required>
+            <input type="text" id="direccion" >
         </div>
 
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="email" id="email" required>
+            <input type="email" id="email" >
         </div>
 
         <div class="form-group">
             <label for="telefono">Teléfono:</label>
-            <input type="tel" id="telefono" required>
+            <input type="tel" id="telefono" >
         </div>
 
         <div class="form-group">
             <label for="capacidad">Capacidad:</label>
-            <input type="number" id="capacidad" required>
+            <input type="number" id="capacidad" >
         </div>
 
         <div class="form-group">
             <label for="horario_apertura">Horario Apertura:</label>
-            <input type="time" id="horario_apertura" required>
+            <input type="time" id="horario_apertura" >
         </div>
 
         <div class="form-group">
             <label for="horario_cierre">Horario Cierre:</label>
-            <input type="time" id="horario_cierre" required>
+            <input type="time" id="horario_cierre" >
         </div>
 
         <div class="form-group">
             <label for="imagen">Imagen:</label>
-            <input type="file" id="imagen" accept="image/*" required>
+            <input type="file" id="imagen" accept="image/*" >
             <img id="imagenPreview" src="#" alt="Vista previa de la imagen" style="display: none;">
         </div>
 
@@ -170,6 +170,8 @@
                 }
             }
 
+            admin_id= decodedToken.id;
+
             // Construir objeto del restaurante
             const restaurante = {
                 administrador_id: decodedToken.id.toString(),
@@ -184,7 +186,7 @@
             };
 
             try {
-                const response = await fetch('http://localhost:8080/restaurantes', {
+                const response = await fetch(`http://localhost:8080/restaurantes/${admin_id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -195,7 +197,7 @@
 
                 if (response.ok) {
                     // Redirección con parámetro de éxito
-                    window.location.href = 'index.html?success=restaurante-creado';
+                    window.location.href = 'index.html?success=restaurante-modificado';
                 } else {
                     const errorData = await response.json();
                     alert(`Error: ${errorData.message || 'Error al crear el restaurante'}`);

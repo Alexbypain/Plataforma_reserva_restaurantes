@@ -24,6 +24,15 @@ document.addEventListener("DOMContentLoaded", function() {
         window.history.replaceState({}, document.title, window.location.pathname);
     }
 
+    if (successParam === "restaurante-modificado") {
+    const msg = document.getElementById("successModified");
+    if (msg) {
+      msg.style.display = "block";
+      setTimeout(() => msg.style.display = "none", 5000);
+    }
+  }
+
+
     // ✅ Obtener el token del Local Storage
     const token = localStorage.getItem("jwtToken");
     if (!token) {
@@ -58,6 +67,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById("adminLink").style.display = "inline-block";
                 document.getElementById("adminReservasNowLink").style.display = "block";
 
+                if(!payload.restaurante){
+                    document.getElementById("adminDropdown").style.display = "block";
+                }else{
+                    document.getElementById("adminModificar").style.display = "block";
+                    
+                }
+
             }
 
         
@@ -73,12 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (restauranteLink) restauranteLink.style.display = "inline-block";
                 if (reservasLink) reservasLink.style.display = "inline-block";
 
-                if(!payload.restaurante){
-                    document.getElementById("adminDropdown").style.display = "block";
-                }else{
-                    document.getElementById("adminModificar").style.display = "block";
-                    
-                }
+                
                 
             } else {
                 // Ocultar explícitamente si no es rol USER
